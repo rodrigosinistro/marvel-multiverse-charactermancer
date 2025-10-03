@@ -1,0 +1,242 @@
+{
+  "id": "marvel-multiverse-charactermancer",
+  "title": "Marvel Multiverse — Charactermancer",
+  "description": "Assistente passo a passo para criação de personagens do sistema Marvel Multiverse RPG.",
+  "authors": [
+    {
+      "name": "Rodrigo + GPT-5 Thinking"
+    }
+  ],
+  "version": "0.1.0",
+  "compatibility": {
+    "minimum": "12",
+    "verified": "13",
+    "maximum": "14"
+  },
+  "esmodules": [
+    "scripts/charactermancer.js"
+  ],
+  "styles": [
+    "styles/styles.css"
+  ],
+  "languages": [
+    {
+      "lang": "pt-BR",
+      "name": "Português (Brasil)",
+      "path": "lang/pt-BR.json"
+    }
+  ],
+  "url": "https://github.com/rodrigosinistro/marvel-multiverse-charactermancer",
+  "manifest": "https://raw.githubusercontent.com/rodrigosinistro/marvel-multiverse-charactermancer/v0.1.0/module.json",
+  "download": "https://github.com/rodrigosinistro/marvel-multiverse-charactermancer/releases/download/v0.1.0/marvel-multiverse-charactermancer-v0.1.0.zip",
+  "license": "MIT",
+  "readme": "https://github.com/rodrigosinistro/marvel-multiverse-charactermancer/blob/v0.1.0/README.md",
+  "flags": {
+    "core": {
+      "priority": 100
+    },
+    "marvel-multiverse-charactermancer": {
+      "schema": 1
+    }
+  },
+  "changelog": {
+    "0.6.46": [
+      "Fix: preserva scroll da lista de Ranks (restore imediato + requestAnimationFrame).",
+      "UX: ao selecionar novo Rank os atributos são zerados (mle, agl, res, vig, ego, log).",
+      "UI: mais espaço/visibilidade para o valor de atributo (dropdown 160px, texto branco no selecionado).",
+      "Rules: pontos por Rank {1:5,2:10,3:15,4:20,5:25,6:30}.",
+      "Data: checklist sincronizado com o JSON enviado."
+    ],
+    "0.6.47": [
+      "UI: valor do atributo agora é forçado no controle (seta explicitamente o value após montar as opções).",
+      "UI: alinhamento à direita + padding extra no select para leitura clara do número."
+    ],
+    "0.6.48": [
+      "UI: altura dos dropdowns de Atributos aumentada (44px) e largura maior do campo para leitura clara do número."
+    ],
+    "0.6.49": [
+      "Traços & Tags: painel de Selecionados dividido (Traços à esquerda, Tags à direita).",
+      "Itens concedidos por Ocupação/Origem aparecem como selecionados, não contam no limite e não podem ser removidos.",
+      "Limite de Traços extras agora é igual ao Rank atual (RANK N → N Traços).",
+      "Busca com debounce e preservação de scroll em ambas as listas."
+    ],
+    "0.6.50": [
+      "Traços & Tags: remover agora é um botão (sem <a href>), evitando abrir páginas/abas quando clica no '×'.",
+      "Listas ocultam itens concedidos por Ocupação/Origem; EXCEÇÃO: o traço 'Connections/Conexões' continua aparecendo."
+    ],
+    "0.6.51": [
+      "Busca de Traços/Tags agora atualiza a lista sem re-renderizar o passo (mesmo comportamento das telas Ocupação/Origem).",
+      "Preserva posição de scroll ao buscar/selecionar (restaura também via requestAnimationFrame).",
+      "Não permite escolher Traços já concedidos pela Ocupação/Origem (por id ou nome); exceção: 'Connections/Conexões' pode aparecer e pode ser escolhido múltiplas vezes (contando no limite)."
+    ],
+    "0.6.52": [
+      "Passo 5 — Poderes finalizado: busca com debounce, preserva scroll, chips dos poderes concedidos; pré-requisitos de Rank indicados e bloqueados; limite por Rank + nº de Power Sets respeitado.",
+      "Passo 6 — Revisão: resumo completo com avisos (excesso de poderes / regra de Rank 1), painel estável sem 'pular para o topo'.",
+      "Aplicação ao Ator: inclui automaticamente poderes concedidos por Ocupação/Origem (sem contar no limite)."
+    ],
+    "0.6.53": [
+      "Poderes: listas não sobem para o topo ao selecionar — restauração de scroll fortalecida (imediata + rAF + timeout).",
+      "UI: campo Selecionados dividido — chips de Básicos embaixo de Poderes Básicos e chips do Set atual embaixo da lista do Set.",
+      "Power Sets: dropdown ampliado (100% do card) e com cores como Atributos (opções pretas; valor exibido branco).",
+      "Resiliência contra erro de render: _renderInner agora retorna fallback seguro se ocorrer exceção."
+    ],
+    "0.6.54": [
+      "Poderes: removido painel inferior 'Selecionados — Poderes' do template; layout agora usa chips separados abaixo de Básicos e do Set atual (controlados por JS).",
+      "UI: reforços adicionais de largura/cores do dropdown de Power Sets; classes garantidas no markup.",
+      "Scroll: preservação mantida por lista, com altura estável para evitar 'pulos'."
+    ],
+    "0.6.55": [
+      "Correção crítica: adiciona método _refreshPowerChips() para evitar TypeError ao navegar (afetava Rank & Atributos e botão Seguinte).",
+      "Mantém as melhorias das versões anteriores (scroll fix, chips divididos, dropdown 100%)."
+    ],
+    "0.6.56": [
+      "Poderes: chips separados abaixo de Básicos e do Set atual (painel único removido).",
+      "Scroll: restauração reforçada por lista via _restoreScroll ao selecionar/remover/filtrar.",
+      "Power Sets: select 100% de largura; texto da caixa branco e opções pretas forçados com !important."
+    ],
+    "0.6.57": [
+      "Poderes: painel 'Selecionados — Poderes' separado (como Traços & Tags), dividido em Básicos (esq.) e Power Sets (dir.), com contador (escolhidos / limite).",
+      "Dropdown de Power Sets com altura igual à do campo de busca (~38px).",
+      "Busca dos Básicos alinhada aos demais: debounce, preserva termo, ESC limpa, Ctrl/Cmd+F foca."
+    ],
+    "0.6.58": [
+      "UI: textos pretos nos painéis de selecionados (Básicos/Power Sets) agora aparecem em branco.",
+      "Busca (Poderes Básicos): corrigido comportamento que parecia aceitar só 1 letra — debounce ajustado e restauração de foco/caret entre re-renders."
+    ],
+    "0.6.59": [
+      "Busca (Poderes Básicos): filtro instantâneo em DOM + atualização debounced (500ms) — corrige definitivamente o caso de aceitar só 1 letra."
+    ],
+    "0.6.60": [
+      "Revisão: destaque de RANK maior e branco.",
+      "Biografia: labels em Português.",
+      "Biografia: Tamanho agora é dropdown (MICROSCOPIC→GARGANTUAN).",
+      "Histórico e Personalidade ocupam a largura total (linha inteira)."
+    ],
+    "0.6.61": [
+      "Correção: Step 6 travava ao clicar ‘Seguinte’ — método _bioSelectSize ausente. Adicionado dentro da classe.",
+      "Revisão: listeners atualizados para salvar mudanças do dropdown Tamanho."
+    ],
+    "0.6.62": [
+      "Fix: Passo 5 > Seguinte não abria Revisão por falta do método _bioSelectSize. Método adicionado dentro da classe.",
+      "Revisão: listeners de biografia lidam com 'change' e 'input'."
+    ],
+    "0.6.63": [
+      "Revisão: dropdown **Tamanho** ~50% mais alto.",
+      "Revisão: **Histórico** e **Personalidade** agora ocupam toda a largura útil e ficam logo abaixo do rótulo."
+    ],
+    "0.6.64": [
+      "Regras: poderes de **Origem** agora **contam no limite** (consumo em ordem alfabética).",
+      "UI: contador inclui Origem; botões respeitam limite remanescente.",
+      "Aplicação: token usa **Codinome**; **Tamanho** salvo em system.size (lowercase)."
+    ],
+    "0.6.65": [
+      "Fix: erro 'Cannot access limit before initialization' ao abrir Passo 5 (quebrava o botão 'Seguinte' no Passo 4)."
+    ],
+    "0.6.66": [
+      "Fix: inicialização de `originConsume` movida para o topo do Passo 5 (resolvido travamento ao sair do Passo 4)."
+    ],
+    "0.6.67": [
+      "Fix definitivo: declara `limit` e `originConsume` ANTES do uso em _renderPowers (Passo 5)."
+    ],
+    "0.6.68": [
+      "Fix crítico: removidas declarações duplicadas de `limit`/`originConsume` no Passo 5 (quebravam o carregamento do módulo e sumia o botão)."
+    ],
+    "0.6.69": [
+      "Hotfix: build repacotada; correção de inicialização em Poderes mantida; remoção de duplicata de `limit/originConsume`."
+    ],
+    "0.6.73": [
+      "Janela padrão aumentada para 1980×1260 e redimensionável (alça no canto inferior direito).",
+      "Passo 5 — Poderes: verificação completa de pré‑requisitos (Rank, Atributos, Traços, Tags e Poderes).",
+      "Passo 6 — Aplicar no Ator: séries numéricas colapsadas (mantém apenas a maior versão, ex.: Uncanny/Accuracy)."
+    ],
+    "0.6.74": [
+      "Leitura dinâmica dos Compêndios: ao abrir o Charactermancer, os **Poderes** são atualizados com dados do Mundo/Compêndios (sobrescreve JSON base)."
+    ],
+    "0.6.75": [
+      "Poderes agora são atualizados do Mundo/Compêndios automaticamente ao abrir (ignora cache) e também via botão ⟳ em Passo 5.",
+      "Hotfix: mantém posição de scroll ao atualizar a lista."
+    ],
+    "0.6.76": [
+      "Força atualização real dos Compêndios: limpa cache interno antes de carregar; botão ⟳ agora de fato recarrega os dados; logs informam contagem de itens (world/packs)."
+    ],
+    "0.6.77": [
+      "Fix: atualização de poderes agora usa leitura direta de Compêndios (getDocuments) — sem cache. Botão ⟳ passa a refletir alterações imediatamente."
+    ],
+    "0.6.83": [
+      "Rebase estável em 0.6.77: mantém leitura direta dos Compêndios. Adicionado botão de cabeçalho 'Atualizar' (texto) e auto-refresh ao abrir. Janela grande por padrão."
+    ],
+    "0.6.94": [
+      "Removidos botões de 'Atualizar (Compêndios)' e o script mmc-refresh-patch.js."
+    ],
+    "0.6.95": [
+      "Proteção contra crash em _activateCoreListeners quando parentElement não existe."
+    ],
+    "0.6.96": [
+      "Compatibilidade com cleaner-sheet-title-bar: ignora handlers no render do Charactermancer.",
+      "Pasta raiz correta e limpeza de botões de atualização."
+    ],
+    "0.6.97": [
+      "Fix: Passo 4 (Traits & Tags) agora carrega corretamente itens criados no Mundo e em Compêndios (índice sempre fresco, sem cache).",
+      "Fix: Busca no Passo 4 agora encontra todos os itens disponíveis.",
+      "Mantido: Sem botão 'Atualizar' (refresh automático ao abrir).",
+      "Mantido: Guard contra erro parentElement."
+    ],
+    "0.6.98": [
+      "Step 4: preserve list scroll after select/remove and after live merge (world/compendia).",
+      "Step 4: add live hooks for create/update/delete of Items (trait/tag) so lists stay in sync on the fly.",
+      "Fix DataModelValidationError: ensure selected entries carry a valid 'type' when applying to the Actor.",
+      "No 'Atualizar' button; guard against parentElement intact."
+    ],
+    "0.6.99": [
+      "Fix: syntax error in Step 4 live-load console.warn (prevented module init and button injection).",
+      "Ensured Charactermancer button shows in Actors directory (renderActorDirectory hook runs again)."
+    ],
+    "0.6.100": [
+      "Fix: removed stray console.warn/brace introduced in Step 4 live-load block that prevented initialization and hid the Charactermancer button.",
+      "Confirm: actor directory button injection ok on v13; no changes to UX; hooks and scroll preservation retained."
+    ],
+    "0.6.101": [
+      "Actor directory button injection: support both '.header-actions' (v13) and legacy '.action-buttons' (older themes/modules)."
+    ],
+    "0.6.102": [
+      "Step 5: de-duplicate powers from base JSON + packs/world by name; avoid duplicates like 'Banging Heads'/'Flare'.",
+      "Step 5: defensive de-dup before rendering list, and clear list containers before append (existing code already clears).",
+      "Finalize: ensure 'type' is defined on all embedded documents before create (prevents DataModelValidationError)."
+    ],
+    "0.6.103": [
+      "Finalize: wrapped item creation block with braces to avoid parser ambiguity; eliminates 'Uncaught' at line ~1195 and restores module init (button appears)."
+    ],
+    "0.6.104": [
+      "Powers list: keep same power name visible in multiple Power Sets (dedupe key now includes powerSet).",
+      "Example: 'Jump 1/2/3' show under both Super-Strength and Spider-Powers when applicable."
+    ],
+    "0.6.105": [
+      "Fix: closed helper braces at top of ES module to prevent early parse error at line ~17; restores module init and Charactermancer button."
+    ],
+    "0.6.106": [
+      "Powers list: fixed 'allP' source (used this.state.data.powers) instead of a broken spread; filtering now respects selected Power Set.",
+      "Init log now shows module.json version dynamically."
+    ],
+    "0.6.107": [
+      "Powers list: normalize Power Set names (unique by lowercase) and filter case-insensitively; fixes missing entries like 'Jump 2/3' when a set name has minor punctuation/whitespace variants across sources."
+    ],
+    "0.6.108": [
+      "Global fix: normalize `system.powerSet` across all sources (replace en/em-dash with hyphen, collapse whitespace, trim).",
+      "Ensures equality checks in Step 6 (Review) match items from compendia even when power set labels differ slightly (e.g., 'Super–Strength' vs 'Super-Strength').",
+      "Includes previous fixes: Step 4 fresh load, Step 5 dedupe by (name+powerSet), case-insensitive filtering, and finalize guards."
+    ],
+    "0.1.0": [
+      "First GitHub release (baseline = v0.6.109 internal).",
+      "Step 5 (Powers): cross-list numeric families across Power Sets (e.g., Jump 1/2/3 in Super-Strength and Spider-Powers).",
+      "Step 5: dedupe by (name + powerSet) and case-insensitive filtering; correct data source for list.",
+      "Step 4 (Traits & Tags): fresh load of World + Compendia on open (no 'Atualizar' button), live hooks, scroll preservation.",
+      "Finalize: creation without 'type undefined' errors.",
+      "Compatibility: Foundry v13 (min v12)."
+    ]
+  },
+  "scripts": [
+    "scripts/mmc-guard-core-listeners.js",
+    "scripts/mmc-compat-cleaner-titlebar.js"
+  ],
+  "bugs": "https://github.com/rodrigosinistro/marvel-multiverse-charactermancer/issues"
+}
