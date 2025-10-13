@@ -7,7 +7,7 @@
       "name": "Rodrigo + GPT-5 Thinking"
     }
   ],
-  "version": "0.1.0",
+  "version": "0.1.1",
   "compatibility": {
     "minimum": "12",
     "verified": "13",
@@ -27,10 +27,10 @@
     }
   ],
   "url": "https://github.com/rodrigosinistro/marvel-multiverse-charactermancer",
-  "manifest": "https://raw.githubusercontent.com/rodrigosinistro/marvel-multiverse-charactermancer/v0.1.0/module.json",
-  "download": "https://github.com/rodrigosinistro/marvel-multiverse-charactermancer/releases/download/v0.1.0/marvel-multiverse-charactermancer-v0.1.0.zip",
+  "manifest": "https://raw.githubusercontent.com/rodrigosinistro/marvel-multiverse-charactermancer/v0.1.1/module.json",
+  "download": "https://github.com/rodrigosinistro/marvel-multiverse-charactermancer/releases/download/v0.1.1/marvel-multiverse-charactermancer-v0.1.1.zip",
   "license": "MIT",
-  "readme": "https://github.com/rodrigosinistro/marvel-multiverse-charactermancer/blob/v0.1.0/README.md",
+  "readme": "https://github.com/rodrigosinistro/marvel-multiverse-charactermancer/blob/v0.1.1/README.md",
   "flags": {
     "core": {
       "priority": 100
@@ -232,6 +232,10 @@
       "Step 4 (Traits & Tags): fresh load of World + Compendia on open (no 'Atualizar' button), live hooks, scroll preservation.",
       "Finalize: creation without 'type undefined' errors.",
       "Compatibility: Foundry v13 (min v12)."
+    ],
+    "0.1.1": [
+      "Fix: traits and tags selected in the Charactermancer now migrate to the actor sheet with their canonical item types.",
+      "Data: trait/tag loader keeps compendium type while tracking normalized kind for reliable categorization."
     ]
   },
   "scripts": [
