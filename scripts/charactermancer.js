@@ -69,31 +69,33 @@ static async _mmcEnsureType(stub, fallback){
         return null;
       };
 
+      const sanitize = (data)=>{
+        if (!data) return data;
+        const cleaned = foundry.utils.deepClone(data);
+        delete cleaned._id;
+        delete cleaned.id;
+        delete cleaned.uuid;
+        delete cleaned.pack;
+        delete cleaned.mmcKind;
+        if (!cleaned.type && fallback) cleaned.type = fallback;
+        if (!cleaned.system) cleaned.system = {};
+        return cleaned;
+      };
+
       const doc = await loadFromUuid(uuid);
       if (doc){
         try{
-          const docData = doc.toObject?.() || doc;
-          const merged = foundry.utils.mergeObject(docData, source, { inplace: false, insertKeys: true, overwrite: true, recursive: true });
+          const docData = doc.toObject?.() ?? doc;
+          const cleaned = sanitize(docData) ?? {};
+          // Preserve any user-entered overrides from the stub when they add new fields.
+          const merged = foundry.utils.mergeObject(cleaned, source, { inplace: false, insertKeys: true, overwrite: false, recursive: true });
           if (!merged.type) merged.type = doc.type || fallback;
           if (!merged.system) merged.system = foundry.utils.deepClone(doc.system ?? {});
-          delete merged._id;
-          delete merged.id;
-          delete merged.uuid;
-          delete merged.pack;
-          delete merged.mmcKind;
-          return merged;
+          return sanitize(merged);
         }catch(_){ /* fallback to source */ }
       }
 
-      const out = source;
-      if (!out.type && fallback) out.type = fallback;
-      if (!out.system) out.system = {};
-      delete out._id;
-      delete out.id;
-      delete out.uuid;
-      delete out.pack;
-      delete out.mmcKind;
-      return out;
+      return sanitize(source);
     }catch(e){ return stub; }
   }
 
