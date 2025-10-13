@@ -34,7 +34,7 @@ export async function loadTraitsAndTags() {
           id: entry._id,
           uuid: `Compendium.${pack.metadata.id}.${entry._id}`,
           name: entry.name,
-          type: entry.type,
+          type: entry.type || normalizedType,
           mmcKind: normalizedType,
           img: entry.img || (itemType.includes("tag") ? "icons/svg/tag.svg" : "icons/svg/mystery-man.svg"),
           pack: pack.metadata.id,
@@ -42,8 +42,8 @@ export async function loadTraitsAndTags() {
           flags: entry.flags || {},
           source: pack.metadata.label
         };
-        if (normalizedType === "trait") traitsData.push(base);
-        else if (normalizedType === "tag") tagsData.push(base);
+        if (itemType === "trait" || itemType === "mm-trait" || normalizedType === "trait") traitsData.push(base);
+        else if (itemType === "tag" || itemType === "mm-tag" || normalizedType === "tag") tagsData.push(base);
       }
     } catch (err) {
       console.warn(`Marvel Multiverse Charactermancer | Erro ao carregar pack ${pack?.metadata?.id}:`, err);
