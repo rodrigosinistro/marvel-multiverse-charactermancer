@@ -45,22 +45,57 @@ class MMCCharactermancer extends Application {
   }
 static async _mmcEnsureType(stub, fallback){
     try{
-      if (stub?.type) return stub;
-      const out = {...stub};
-      // try from uuid/pack
-      const uuid = out.uuid || out._id && out.pack ? `Compendium.${out.pack}.${out._id}` : out.uuid;
-      if (uuid && uuid.startsWith("Compendium.")){
+      const source = foundry.utils.deepClone(stub ?? {});
+      const uuid = source.uuid || (source._id && source.pack ? `Compendium.${source.pack}.${source._id}` : null);
+      const loadFromUuid = async (u)=>{
+        if (!u) return null;
         try{
-          const parts = uuid.split(".");
-          const packId = `${parts[1]}.${parts[2]}`;
-          const docId = parts[3];
-          const pack = game.packs?.get(packId);
-          const doc = await pack?.getDocument(docId);
-          if (doc?.type) out.type = doc.type;
+          if (typeof fromUuid === "function"){
+            const doc = await fromUuid(u).catch(()=>null);
+            if (doc) return doc;
+          }
         }catch(_){}
+        try{
+          const parts = String(u).split(".");
+          if (parts.length >= 4){
+            const packId = `${parts[1]}.${parts[2]}`;
+            const docId = parts[3];
+            const pack = game.packs?.get(packId);
+            if (pack?.getDocument){
+              return await pack.getDocument(docId);
+            }
+          }
+        }catch(_){}
+        return null;
+      };
+
+      const sanitize = (data)=>{
+        if (!data) return data;
+        const cleaned = foundry.utils.deepClone(data);
+        delete cleaned._id;
+        delete cleaned.id;
+        delete cleaned.uuid;
+        delete cleaned.pack;
+        delete cleaned.mmcKind;
+        if (!cleaned.type && fallback) cleaned.type = fallback;
+        if (!cleaned.system) cleaned.system = {};
+        return cleaned;
+      };
+
+      const doc = await loadFromUuid(uuid);
+      if (doc){
+        try{
+          const docData = doc.toObject?.() ?? doc;
+          const cleaned = sanitize(docData) ?? {};
+          // Preserve any user-entered overrides from the stub when they add new fields.
+          const merged = foundry.utils.mergeObject(cleaned, source, { inplace: false, insertKeys: true, overwrite: false, recursive: true });
+          if (!merged.type) merged.type = doc.type || fallback;
+          if (!merged.system) merged.system = foundry.utils.deepClone(doc.system ?? {});
+          return sanitize(merged);
+        }catch(_){ /* fallback to source */ }
       }
-      if (!out.type && fallback) out.type = fallback;
-      return out;
+
+      return sanitize(source);
     }catch(e){ return stub; }
   }
 
@@ -1230,6 +1265,32 @@ _bioInput(key,label,val){
     const items = [];
     if (this.state.occupation) items.push(this.state.occupation);
     if (this.state.origin) items.push(this.state.origin);
+    const grantedTraits = [
+      ...(this.state.occupation?.system?.traits || []),
+      ...(this.state.origin?.system?.traits || [])
+    ];
+    const grantedTags = [
+      ...(this.state.occupation?.system?.tags || []),
+      ...(this.state.origin?.system?.tags || [])
+    ];
+    const preparedTraits = MMCCharactermancer._mmcDedupByName([
+      ...grantedTraits,
+      ...(this.state.selectedTraits || [])
+    ]).map(it => {
+      const clone = foundry.utils.deepClone(it ?? {});
+      if (!clone.mmcKind) clone.mmcKind = "trait";
+      if (!clone.type && clone.mmcKind) clone.type = clone.mmcKind;
+      return clone;
+    });
+    const preparedTags = MMCCharactermancer._mmcDedupByName([
+      ...grantedTags,
+      ...(this.state.selectedTags || [])
+    ]).map(it => {
+      const clone = foundry.utils.deepClone(it ?? {});
+      if (!clone.mmcKind) clone.mmcKind = "tag";
+      if (!clone.type && clone.mmcKind) clone.type = clone.mmcKind;
+      return clone;
+    });
     const grantedPowers = [ ...(this._getGrantedPowers()||[]).filter(p=>p._grantedFrom!=='origin'), ...this._originGrantSubset(this._computePowerLimit()) ];
     // Deduplicate by name to avoid duplicates with chosen
     const byName = new Set(grantedPowers.map(p=>(p.name||'').toLowerCase()));
@@ -1258,14 +1319,15 @@ _bioInput(key,label,val){
     const cleanedNames = new Set(cleanedPowers.map(p=>(p.name||'').toLowerCase()));
     const keptChosen = (chosen||[]).filter(p => cleanedNames.has((p.name||'').toLowerCase()));
     const keptGranted = (grantedPowers||[]).filter(p => cleanedNames.has((p.name||'').toLowerCase()));
-items.push(...this.state.selectedTraits, ...this.state.selectedTags, ...keptGranted, ...keptChosen);
+    items.push(...preparedTraits, ...preparedTags, ...keptGranted, ...keptChosen);
     if (items.length) {
       // Ensure every item has a type (system v2.2.0 requires it)
       const fixedItems = [];
       for (const it of items){
-        const fallback = (it?.system?.powerSet!==undefined || it?.system?.actionType) ? "power" :
+        const fallback = it?.mmcKind ||
+                         (it?.system?.powerSet!==undefined || it?.system?.actionType ? "power" :
                          (String(it?.name||"").toLowerCase().includes("tag") ? "tag" :
-                         (String(it?.name||"").toLowerCase().includes("trait") ? "trait" : undefined));
+                         (String(it?.name||"").toLowerCase().includes("trait") ? "trait" : undefined)));
         fixedItems.push(await MMCCharactermancer._mmcEnsureType(it, fallback));
       }
       await actor.createEmbeddedDocuments("Item", fixedItems);
