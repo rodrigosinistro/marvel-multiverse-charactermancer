@@ -29,21 +29,23 @@ export async function loadTraitsAndTags() {
         const normalizedType = itemType.includes("trait") ? "trait"
           : itemType.includes("tag") ? "tag"
           : itemType;
+        const canonicalType = entry.type && String(entry.type).trim() ? entry.type : normalizedType;
+        const mmcKind = normalizedType || String(canonicalType || "").toLowerCase();
         const base = {
           _id: entry._id,
           id: entry._id,
           uuid: `Compendium.${pack.metadata.id}.${entry._id}`,
           name: entry.name,
-          type: entry.type || normalizedType,
-          mmcKind: normalizedType,
+          type: canonicalType,
+          mmcKind,
           img: entry.img || (itemType.includes("tag") ? "icons/svg/tag.svg" : "icons/svg/mystery-man.svg"),
           pack: pack.metadata.id,
           system: entry.system || {},
           flags: entry.flags || {},
           source: pack.metadata.label
         };
-        if (itemType === "trait" || itemType === "mm-trait" || normalizedType === "trait") traitsData.push(base);
-        else if (itemType === "tag" || itemType === "mm-tag" || normalizedType === "tag") tagsData.push(base);
+        if (mmcKind === "trait") traitsData.push(base);
+        else if (mmcKind === "tag") tagsData.push(base);
       }
     } catch (err) {
       console.warn(`Marvel Multiverse Charactermancer | Erro ao carregar pack ${pack?.metadata?.id}:`, err);
