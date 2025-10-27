@@ -6,7 +6,7 @@ Charactermancer para **Marvel Multiverse RPG** no **Foundry VTT**.
 Em **Add-on Modules → Install Module → Manifest URL**, cole:
 
 ```
-https://raw.githubusercontent.com/rodrigosinistro/marvel-multiverse-charactermancer/v0.1.1/module.json
+https://raw.githubusercontent.com/rodrigosinistro/marvel-multiverse-charactermancer/v0.1.3/module.json
 ```
 
 ## Principais Recursos
@@ -21,7 +21,7 @@ https://raw.githubusercontent.com/rodrigosinistro/marvel-multiverse-characterman
 - Foundry VTT **v13** (mínimo **v12**).
 
 ## Links
-- **Manifest:** https://raw.githubusercontent.com/rodrigosinistro/marvel-multiverse-charactermancer/v0.1.1/module.json
-- **Download:** https://github.com/rodrigosinistro/marvel-multiverse-charactermancer/releases/download/v0.1.1/marvel-multiverse-charactermancer-v0.1.1.zip
+- **Manifest:** https://raw.githubusercontent.com/rodrigosinistro/marvel-multiverse-charactermancer/v0.1.3/module.json
+- **Download:** https://github.com/rodrigosinistro/marvel-multiverse-charactermancer/releases/download/v0.1.3/marvel-multiverse-charactermancer-v0.1.3.zip
 - **Changelog:** [CHANGELOG.md](./CHANGELOG.md)
 - **Repositório:** https://github.com/rodrigosinistro/marvel-multiverse-charactermancer
